@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f3efe7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#151412" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="CSS Tracker">
+<title>CSS Roadmap Tracker</title>
+<style>
+:root{--bg:#f3efe7;--sf:#fbf9f4;--ink:#1c1b18;--mute:#75706a;--line:#dcd6ca;--ac:#c8431f;--ok:#2f6b4f;--r:10px;--serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#151412;--sf:#1d1b18;--ink:#ece7dd;--mute:#8f8a80;--line:#34312c;--ac:#ee6a45;--ok:#6fb391}}
+:root[data-theme="dark"]{--bg:#151412;--sf:#1d1b18;--ink:#ece7dd;--mute:#8f8a80;--line:#34312c;--ac:#ee6a45;--ok:#6fb391}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:1120px;margin:0 auto;padding:clamp(16px,4vw,40px)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;font:11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+button{font:inherit;color:inherit;cursor:pointer}
+.ghost{background:none;border:1px solid var(--line);border-radius:99px;padding:5px 12px;font:11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--mute);transition:color .15s,border-color .15s}
+.ghost:hover{color:var(--ink);border-color:var(--ink)}
+.hero{display:grid;grid-template-columns:auto 1fr;gap:clamp(20px,4vw,52px);align-items:center;padding:clamp(24px,5vw,48px) 0;border-bottom:1px solid var(--line)}
+.ring{--p:0;width:clamp(120px,22vw,176px);aspect-ratio:1;border-radius:50%;background:conic-gradient(var(--ac) calc(var(--p)*1%),var(--line) 0);display:grid;place-items:center}
+.ring b{width:calc(100% - 18px);aspect-ratio:1;border-radius:50%;background:var(--bg);display:grid;place-items:center;font:400 clamp(30px,6vw,46px) var(--serif)}
+h1{font:400 clamp(28px,4.8vw,46px)/1.08 var(--serif);margin:0 0 8px;letter-spacing:-.01em}
+h1 i{color:var(--ac)}
+.sub{margin:0;color:var(--mute);max-width:46ch}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
+.stat{background:var(--sf);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;min-width:0}
+.stat small{font:10px var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--mute);display:block}
+.stat strong{font:400 clamp(20px,3vw,26px) var(--serif)}
+.act{display:flex;gap:2px;margin-top:6px}
+.act s{flex:1;height:6px;background:var(--ac);border-radius:1px}
+.main{display:grid;grid-template-columns:270px minmax(0,1fr);gap:clamp(24px,4vw,48px);padding-top:28px;align-items:start}
+.rail{position:sticky;top:16px;max-height:calc(100dvh - 32px);overflow:auto;padding-right:4px}
+.rail h2{display:flex;justify-content:space-between;font:11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin:0 0 8px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.rail h2 span{color:var(--ac)}
+ul,ol{list-style:none;margin:0 0 24px;padding:0}
+.it{display:flex;gap:10px;padding:6px 0;cursor:pointer;align-items:flex-start}
+.cb{appearance:none;-webkit-appearance:none;flex:none;width:18px;height:18px;margin:2px 0 0;border:1.5px solid var(--mute);border-radius:4px;display:grid;place-items:center;cursor:pointer;transition:border-color .15s;background:none}
+.cb::after{content:"";width:8px;height:8px;border-radius:2px;background:var(--ac);transform:scale(0);transition:transform .15s}
+.cb:checked{border-color:var(--ac)}
+.cb:checked::after{transform:scale(1)}
+.cb:checked+span{color:var(--mute)}
+.rail ol button{display:flex;justify-content:space-between;gap:8px;width:100%;background:none;border:0;padding:6px 0;text-align:left;color:var(--ink)}
+.rail ol button:hover span{color:var(--ac)}
+.rail ol b{font:400 12px var(--mono);color:var(--mute)}
+.bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+#q{flex:1 1 200px;min-width:0;background:var(--sf);border:1px solid var(--line);border-radius:var(--r);padding:9px 12px;font:inherit;color:inherit}
+#q::placeholder{color:var(--mute)}
+.chip{background:none;border:1px solid var(--line);border-radius:var(--r);padding:8px 12px;font-size:13px;color:var(--mute)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sec{border-bottom:1px solid var(--line)}
+.hd{display:grid;grid-template-columns:34px 1fr auto;column-gap:8px;align-items:baseline;width:100%;background:none;border:0;padding:14px 0 12px;text-align:left}
+.no{font:12px var(--mono);color:var(--mute)}
+.tt{font:400 19px/1.2 var(--serif)}
+.tt em{display:block;font:10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute);font-style:normal;margin-top:3px}
+.ct{font:12px var(--mono);color:var(--mute)}
+.ct u{text-decoration:none;display:inline-block;width:12px;text-align:center;color:var(--ac)}
+.pr{height:2px;background:var(--line);grid-column:2/-1;margin-top:10px;border-radius:2px;overflow:hidden}
+.pr b{display:block;height:100%;background:var(--ac);transition:width .25s}
+.pr.full b{background:var(--ok)}
+.bd{padding:0 0 18px 42px}
+.bd ul{margin:0 0 10px}
+textarea{width:100%;background:var(--sf);border:1px solid var(--line);border-radius:var(--r);padding:9px 12px;font:13px/1.45 inherit;color:inherit;resize:vertical;min-height:44px}
+.empty{color:var(--mute);padding:32px 0}
+.foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:28px;font:11px var(--mono);color:var(--mute)}
+:is(button,input,textarea):focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+@media(max-width:860px){.main{grid-template-columns:1fr}.rail{position:static;max-height:none}}
+@media(max-width:560px){.hero{grid-template-columns:1fr}.bd{padding-left:0}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><span>Frontend fresher · CSS roadmap</span><span><button class="ghost" id="in" hidden>Install</button> <button class="ghost" id="th">Theme</button> <button class="ghost" id="rs">Reset</button></span></div>
+  <div class="hero" id="hero"></div>
+  <div class="main">
+    <aside class="rail" id="rail" aria-label="Builds and priority path"></aside>
+    <main>
+      <div class="bar">
+        <input id="q" type="search" placeholder="Search topics…  ( / )" aria-label="Search topics">
+        <button class="chip" data-f="all">All</button><button class="chip" data-f="priority">Priority</button><button class="chip" data-f="open">Open</button><button class="chip" data-f="done">Done</button>
+        <button class="chip" id="ex">Expand</button><button class="chip" id="co">Collapse</button>
+      </div>
+      <div id="list"></div>
+      <div class="foot"><span>Saved in this browser.</span><span>Box Model → Flexbox → Grid → Responsive → Positioning → Type → Forms → States → Variables → Motion → A11y → DevTools</span></div>
+    </main>
+  </div>
+</div>
+<script>
+const D=[
+["CSS basics","G",0,"Syntax: selector, property, value|External CSS files|Comments|Class vs ID|Element selectors|Group selectors|Universal selector *"],
+["Selectors","M",0,".class, #id, element|Descendant: .parent .child|Direct child: >|Siblings: + and ~|Attribute selectors: input[type=\"email\"]|Selector grouping|Combining selectors"],
+["Cascade, specificity, inheritance","M",0,"Why one rule overrides another|Specificity|Source order|Inheritance|inherit / initial / unset|Basics of !important|Avoid depending on !important"],
+["Box model","M",1,"width and height|Content, padding, border, margin|box-sizing: border-box|min-width / max-width|min-height / max-height"],
+["CSS units","M",0,"px and %|rem and em|vw, vh, dvh|fr|Fixed vs relative: when to use which"],
+["Colors and backgrounds","G",0,"Hex, RGB/RGBA, HSL|color and background-color|background-image, size, position|Gradients"],
+["Typography","M",1,"font-family, size, weight|line-height, letter-spacing|text-align, decoration, transform|Readable line lengths|Heading/body hierarchy"],
+["Text handling","G",0,"white-space|overflow-wrap, word-break|text-overflow: ellipsis|Long usernames, URLs, titles"],
+["Display behavior","M",0,"block, inline, inline-block, none|flex and grid|Normal document flow"],
+["Flexbox","M",1,"Main axis / cross axis|flex-direction|justify-content, align-items, align-content|gap and flex-wrap|flex-grow, flex-shrink, flex-basis, flex|align-self and order|Flex overflow and min-width: 0"],
+["CSS Grid","M",1,"display: grid|grid-template-columns / rows|gap, fr, repeat(), minmax()|auto-fit vs auto-fill|grid-column, grid-row|Responsive card grids|Basic grid areas"],
+["Positioning","M",1,"static, relative, absolute|fixed, sticky|top, right, bottom, left, inset|What absolute is positioned relative to"],
+["z-index and stacking context","I",0,"z-index basics|Why huge values sometimes fail|position, transform, opacity, filter effects|Modals, dropdowns, tooltips"],
+["Overflow","M",0,"overflow, overflow-x, overflow-y|hidden, auto, scroll|Debug horizontal overflow"],
+["Responsive design","M",1,"Mobile-first|Flexible widths and max-width|Responsive images|Responsive Grid/Flexbox|No fixed-width layouts|Test mobile, tablet, laptop, desktop"],
+["Media queries","M",0,"@media with min-width / max-width|Break where the layout breaks, not at dozens of breakpoints"],
+["Modern responsive functions","G",0,"calc()|min() and max()|clamp() for type and spacing"],
+["Images and media","M",0,"max-width: 100%; height: auto|object-fit, object-position|aspect-ratio|Responsive image cards"],
+["Forms","I",1,"input, textarea, select|Checkbox and radio|Buttons and labels|Disabled, error, validation states|Focus states"],
+["Pseudo-classes","M",1,":hover :focus :focus-visible :active|:disabled :checked|:first-child :last-child :nth-child()|:not()|Know :is(), :where(), :has()"],
+["Pseudo-elements","I",0,"::before and ::after|::placeholder|::selection|::marker"],
+["Borders and visual styling","G",0,"border and border-radius|border vs outline|box-shadow|opacity"],
+["Transforms","M",0,"translate()|scale()|rotate()|transform-origin"],
+["Transitions","M",1,"transition property and duration|Easing and delay|Multiple properties|Smooth hover/focus interactions"],
+["Animations","G",0,"@keyframes|Duration, timing, iteration, delay|Loaders, entrances, feedback"],
+["CSS variables","M",1,":root and --custom-property|var()|Tokens: color, spacing, radius, shadow|Theming"],
+["Design-system thinking","G",0,"Spacing scale|Typography scale|Color tokens|Radius and shadow tokens|Reusable button / card / input|Consistent component states"],
+["Accessibility CSS","I",1,"Never blindly remove focus outlines|:focus-visible|Readable text contrast|Visible interactive states|Keyboard-friendly UI|prefers-reduced-motion"],
+["Dark mode","G",0,"Variable-driven theming|Theme class or data attribute|Consistent surface, text, border colors"],
+["Modern CSS","K",0,"Nesting|Container queries|:has()|Logical properties (margin-inline)|fit-content, min-content, max-content"],
+["CSS organization for React","K",0,"Global vs component styles|CSS Modules|Naming conventions|Avoid massive global files|Tailwind later"],
+["DevTools","M",1,"Inspect and edit live|Computed styles|Box-model inspector|Flex and Grid inspectors|Responsive device mode|Find overridden properties, debug specificity|Force hover/focus states"],
+["Debugging common problems","M",0,"Element overflowing|Content not centering|Flex item not shrinking|Unexpected margin/padding|Width not applying|height: 100% not working|sticky not working|z-index not working|Text overflowing|Image stretching|Mobile layout breaking|Unwanted horizontal scrollbar"]
+];
+const B=["Navbar","Hero","Forms","Cards","Responsive grid","Sidebar","Dashboard","Modal","Dropdown","Mobile layout"];
+const LV={M:"Master",I:"Important",G:"Working knowledge",K:"Aware"};
+const KEY="css-roadmap-tracker-v1";
+let S={c:{},b:{},n:{},o:{},l:{},t:""},F="all",Q="",armed=0;
+try{Object.assign(S,JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const $=s=>document.querySelector(s);
+const E=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const day=(o=0)=>{const d=new Date();d.setDate(d.getDate()-o);return d.toLocaleDateString("en-CA")};
+const T=D.map((d,i)=>({i,t:d[0],lv:d[1],p:d[2],it:d[3].split("|")}));
+const total=T.reduce((a,s)=>a+s.it.length,0);
+const dn=s=>s.it.filter((_,j)=>S.c[s.i+"."+j]).length;
+const P=T.filter(s=>s.p);
+
+function render(){
+  const ak=document.activeElement&&document.activeElement.dataset?document.activeElement.dataset.k:null;
+  const done=T.reduce((a,s)=>a+dn(s),0),pct=Math.round(done/total*100);
+  const pd=P.reduce((a,s)=>a+dn(s),0),pt=P.reduce((a,s)=>a+s.it.length,0),pp=Math.round(pd/pt*100);
+  const bd=B.filter((_,i)=>S.b[i]).length;
+  let st=0;for(let o=S.l[day()]>0?0:1;S.l[day(o)]>0;o++)st++;
+  const ready=pp>=75&&bd>=8;
+  $("#hero").innerHTML=`<div class="ring" style="--p:${pct}"><b>${pct}%</b></div><div><h1>CSS, <i>ready for React.</i></h1><p class="sub">${ready?"Target reached. Time to start building in React.":"Target: 75% of the priority path and 8 of 10 proof builds."}</p><div class="stats"><div class="stat"><small>Topics</small><strong>${done}/${total}</strong></div><div class="stat"><small>Priority</small><strong>${pp}%</strong></div><div class="stat"><small>Streak</small><strong>${st}d</strong><span class="act">${[...Array(14)].map((_,k)=>`<s style="opacity:${S.l[day(13-k)]>0?1:.18}"></s>`).join("")}</span></div></div></div>`;
+  $("#rail").innerHTML=`<h2>Proof builds <span>${bd}/10</span></h2><ul>${B.map((b,i)=>`<li><label class="it"><input type="checkbox" class="cb" data-b="${i}" data-k="b${i}" ${S.b[i]?"checked":""}><span>${b}</span></label></li>`).join("")}</ul><h2>Priority path <span>${pp}%</span></h2><ol>${P.map(s=>`<li><button data-go="${s.i}"><span>${s.t}</span><b>${dn(s)}/${s.it.length}</b></button></li>`).join("")}</ol>`;
+  const q=Q.trim().toLowerCase();
+  const rows=T.map(s=>{
+    const d=dn(s),n=s.it.length;
+    if(F=="priority"&&!s.p||F=="open"&&d==n||F=="done"&&d<n)return"";
+    const all=s.it.map((x,j)=>[x,j]);
+    const hit=q?all.filter(([x])=>x.toLowerCase().includes(q)||s.t.toLowerCase().includes(q)):all;
+    if(!hit.length)return"";
+    const op=q||S.o[s.i];
+    return `<section class="sec" id="s${s.i}"><button class="hd" data-t="${s.i}" aria-expanded="${!!op}"><span class="no">${String(s.i+1).padStart(2,"0")}</span><span class="tt">${s.t}<em>${LV[s.lv]}${s.p?" · Priority":""}</em></span><span class="ct">${d}/${n} <u>${op?"−":"+"}</u></span><i class="pr ${d==n?"full":""}"><b style="width:${d/n*100}%"></b></i></button>${op?`<div class="bd"><ul>${hit.map(([x,j])=>`<li><label class="it"><input type="checkbox" class="cb" data-k="${s.i}.${j}" ${S.c[s.i+"."+j]?"checked":""}><span>${E(x)}</span></label></li>`).join("")}</ul><textarea data-n="${s.i}" rows="2" placeholder="Notes, gotchas, links…" aria-label="Notes for ${E(s.t)}">${E(S.n[s.i]||"")}</textarea></div>`:""}</section>`;
+  }).join("");
+  $("#list").innerHTML=rows||'<p class="empty">Nothing matches.</p>';
+  document.querySelectorAll("[data-f]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.f==F));
+  if(ak){const el=document.querySelector(`[data-k="${ak}"]`);if(el)el.focus()}
+}
+
+function bump(on){const d=day();S.l[d]=Math.max(0,(S.l[d]||0)+(on?1:-1))}
+document.addEventListener("change",e=>{
+  const t=e.target;if(!t.classList.contains("cb"))return;
+  if(t.dataset.b!==undefined){S.b[t.dataset.b]=t.checked?1:0}
+  else{if(t.checked)S.c[t.dataset.k]=1;else delete S.c[t.dataset.k];bump(t.checked)}
+  save();render();
+});
+document.addEventListener("click",e=>{
+  const t=e.target.closest("button");if(!t)return;
+  if(t.dataset.t!==undefined){const i=t.dataset.t;S.o[i]=S.o[i]?0:1;save();render()}
+  else if(t.dataset.go!==undefined){S.o[t.dataset.go]=1;F="all";Q="";$("#q").value="";save();render();const el=$("#s"+t.dataset.go);if(el)el.scrollIntoView()}
+  else if(t.dataset.f){F=t.dataset.f;render()}
+  else if(t.id=="ex"){T.forEach(s=>S.o[s.i]=1);save();render()}
+  else if(t.id=="co"){S.o={};save();render()}
+  else if(t.id=="th"){const dark=S.t?S.t=="dark":matchMedia("(prefers-color-scheme:dark)").matches;S.t=dark?"light":"dark";document.documentElement.dataset.theme=S.t;save()}
+  else if(t.id=="rs"){if(!armed){armed=1;t.textContent="Sure?";setTimeout(()=>{armed=0;t.textContent="Reset"},3000)}else{S={c:{},b:{},n:{},o:{},l:{},t:S.t};armed=0;t.textContent="Reset";save();render()}}
+});
+document.addEventListener("input",e=>{
+  if(e.target.id=="q"){Q=e.target.value;render()}
+  else if(e.target.dataset.n!==undefined){S.n[e.target.dataset.n]=e.target.value;save()}
+});
+document.addEventListener("keydown",e=>{if(e.key=="/"&&!/INPUT|TEXTAREA/.test(document.activeElement.tagName)){e.preventDefault();$("#q").focus()}});
+if(S.t)document.documentElement.dataset.theme=S.t;
+render();
+let dp;addEventListener("beforeinstallprompt",e=>{e.preventDefault();dp=e;$("#in").hidden=false});
+$("#in").onclick=async()=>{if(!dp)return;dp.prompt();await dp.userChoice;dp=null;$("#in").hidden=true};
+addEventListener("appinstalled",()=>{$("#in").hidden=true});
+if("serviceWorker" in navigator&&location.protocol.startsWith("http"))addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+</script>
+</body>
+</html>
